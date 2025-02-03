@@ -1,34 +1,39 @@
 @startuml
 
-package Entities {
-    class Employee {
-        - Long id
-        - String name
-        - String role
-        + Long getId()
-        + void setId(Long id)
-        + String getName()
-        + void setName(String name)
-        + String getRole()
-        + void setRole(String role)
-        + boolean equals(Object o)
-        + int hashCode()
-        + String toString()
+package "Entities" {
+    class Employee <<Entity>> {
+        - id : Long
+        - name : String
+        - role : String
     }
 }
 
-package Controllers {
-    class EmployeeController {
-        - EmployeeRepository repository
-        + List<Employee> all()
-        + Employee newEmployee(Employee newEmployee)
-        + Employee one(Long id)
-        + Employee replaceEmployee(Employee newEmployee, Long id)
-        + void deleteEmployee(Long id)
+package "Repositories" {
+    interface EmployeeRepository <<Repository>> {
     }
 }
 
+package "Controllers" {
+    class EmployeeController <<Controller>> {
+        - repository : EmployeeRepository
+    }
+
+    class EmployeeNotFoundException <<Exception>> {
+    }
+
+    class EmployeeNotFoundAdvice <<Advice>> {
+    }
+}
+
+package "Repositories" {
+    class LoadDatabase <<Configuration>> {
+    }
+}
 
 EmployeeController --> EmployeeRepository
-EmployeeController --> Employee
+EmployeeController --> EmployeeNotFoundException
+EmployeeNotFoundAdvice --> EmployeeNotFoundException
+LoadDatabase --> EmployeeRepository
+EmployeeRepository --> Employee
+
 @enduml

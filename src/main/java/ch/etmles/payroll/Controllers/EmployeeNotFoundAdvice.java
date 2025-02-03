@@ -11,8 +11,9 @@ public class EmployeeNotFoundAdvice {
 
     @ResponseBody
     @ExceptionHandler(EmployeeNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     String employeeNotFoundHandler(EmployeeNotFoundException ex){
-        return ex.getMessage();
+        return "Could not delete employee (not found) " + ex.getMessage().split(" ")[4];
     }
 }
+

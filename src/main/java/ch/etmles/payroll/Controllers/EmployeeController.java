@@ -15,6 +15,9 @@ public class EmployeeController {
         this.repository = repository;
     }
 
+
+
+
     /* curl sample :
     curl -i localhost:8080/employees
     */
@@ -66,6 +69,10 @@ public class EmployeeController {
     */
     @DeleteMapping("/employees/{id}")
     void deleteEmployee(@PathVariable Long id){
+        if (!repository.existsById(id)) {
+            throw new EmployeeNotFoundException(id);
+        }
         repository.deleteById(id);
     }
 }
+
