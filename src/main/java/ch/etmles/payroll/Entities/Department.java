@@ -3,9 +3,8 @@ package ch.etmles.payroll.Entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Column;
 
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,12 +13,19 @@ public class Department {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "department")
-    private List<Employee> employees;
+    // Constructeur par défaut
+    public Department() {}
 
-    // Getters and setters
+    // Constructeur avec le nom du département
+    public Department(String name) {
+        this.name = name;
+    }
+
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -36,19 +42,12 @@ public class Department {
         this.name = name;
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Department department)) return false;
-        return Objects.equals(id, department.id) && Objects.equals(name, department.name);
+        if (o == null || getClass() != o.getClass()) return false;
+        Department that = (Department) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
     }
 
     @Override
@@ -58,6 +57,9 @@ public class Department {
 
     @Override
     public String toString() {
-        return "Department{" + "id=" + id + ", name='" + name + '\'' + '}';
+        return "Department{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

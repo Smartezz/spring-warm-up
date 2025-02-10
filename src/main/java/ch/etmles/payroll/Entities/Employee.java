@@ -3,8 +3,8 @@ package ch.etmles.payroll.Entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
 
 import java.util.Objects;
 
@@ -16,25 +16,33 @@ public class Employee {
     private Long id;
 
     private String name;
-    private String role;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false)  // Contrainte d'unicité et non-nullité
     private String email;
 
-    @ManyToOne
+    private String role;
+
+    @ManyToOne  // Relation "beaucoup-à-un" avec le Département
     private Department department;
 
-    // Constructeurs, getters et setters
+    // Constructeur par défaut
     public Employee() {}
 
-    public Employee(String name, String role, String email, Department department) {
+    // Constructeur avec 2 paramètres (pour des cas simples)
+    public Employee(String name, String role) {
         this.name = name;
         this.role = role;
+    }
+
+    // Constructeur complet avec email et département
+    public Employee(String name, String email, String role, Department department) {
+        this.name = name;
         this.email = email;
+        this.role = role;
         this.department = department;
     }
 
-    // Getters and setters
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -51,20 +59,20 @@ public class Employee {
         this.name = name;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Department getDepartment() {
@@ -78,18 +86,24 @@ public class Employee {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Employee employee)) return false;
-        return Objects.equals(id, employee.id) && Objects.equals(name, employee.name)
-                && Objects.equals(role, employee.role) && Objects.equals(email, employee.email);
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) && Objects.equals(name, employee.name) && Objects.equals(email, employee.email) && Objects.equals(role, employee.role) && Objects.equals(department, employee.department);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, role, email);
+        return Objects.hash(id, name, email, role, department);
     }
 
     @Override
     public String toString() {
-        return "Employee{" + "id=" + id + ", name='" + name + '\'' + ", role='" + role + '\'' + ", email='" + email + '\'' + '}';
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", department=" + department +
+                '}';
     }
 }
